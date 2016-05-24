@@ -1,6 +1,6 @@
 # serverless-webrtc-android
 A demo of using WebRTC with no signaling server. But for Android written in Kotlin.
-Compatibile and inspired by this project written for JavaScript: 
+Compatibile and inspired by this project written for JavaScript:
 * http://blog.printf.net/articles/2013/05/17/webrtc-without-a-signaling-server/
 * http://blog.printf.net/articles/2014/07/01/serverless-webrtc-continued
 * https://cjb.github.io/serverless-webrtc/serverless-webrtc.html
@@ -15,10 +15,10 @@ WebRTC requires two data payloads to be transfered between parties, it's called 
 You can either create offer and send it to other party or wait for offer to be delivered to you.
 Usually SDP handshakes are done by special signalling server, but in this case we are not using any, so you'll need to pass SDPs manually by e.g. e-mail.
 
-If it's running IPv4, it's very unlikely that both parties will have public IP address or it will be in the same network. 
-SDP requires you'll need to pass external IP address there, this is done automatically by process called ICE gathering. It uses two types of external servers - STUN and TURN. 
+If it's running IPv4, it's very unlikely that both parties will have public IP address or it will be in the same network.
+SDP requires you'll need to pass external IP address there, this is done automatically by process called ICE gathering. It uses two types of external servers - STUN and TURN.
 We are using only STUN here, but it should work with TURN as well (and even better).
-It can even punch through some NAT mechanisms. 
+It can even punch through some NAT mechanisms.
 
 # Usage
 
