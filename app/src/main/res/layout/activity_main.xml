@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/mat16"
+        android:paddingRight="@dimen/mat16"
+        android:paddingTop="@dimen/mat16"
+        android:paddingBottom="@dimen/mat16"
+        tools:context="cz.sazel.android.serverlesswebrtcandroid.MainActivity">
+
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/edEnterArea"
+            android:layout_alignParentTop="true"
+            android:id="@+id/recyclerView"/>
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/edEnterArea"
+            android:imeActionLabel="@string/send"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+    <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_alignTop="@+id/edEnterArea"
+            android:layout_alignBottom="@+id/edEnterArea"
+            android:layout_alignRight="@+id/edEnterArea"
+            android:layout_alignEnd="@+id/edEnterArea"/>
+
+</RelativeLayout>
