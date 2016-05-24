@@ -29,6 +29,10 @@ It uses **libjingle** library, it's a native library for WebRTC that comes with 
 # Usage
 <img src=".github/create_offer.png" width="320"> <img src=".github/paste_answer.png" width="320"> <img src=".github/demo.png" width="320">
 
+# Known issues
+* There is no renegotiation of connection, it doesn't make much sense without signalling server.
+* If you paste offer in the app, answer is created but after while it goes with 'icegathering failed'. You must be fast to pass the answer to the other side. I'm not sure what causes this.
+
 # License
 You can do whatever you want with this code.
 
