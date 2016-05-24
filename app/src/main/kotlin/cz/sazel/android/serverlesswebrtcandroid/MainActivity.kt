@@ -14,6 +14,7 @@ import cz.sazel.android.serverlesswebrtcandroid.webrtc.ServerlessRTCClient
 import cz.sazel.android.serverlesswebrtcandroid.webrtc.ServerlessRTCClient.State.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.enabled
+import org.jetbrains.anko.onClick
 import org.jetbrains.anko.onEditorAction
 
 class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -46,23 +47,27 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
             onStateChanged(client.state)
         }
 
-
+        btSubmit.onClick { sendMessage() }
         edEnterArea.onEditorAction { textView, i, keyEvent ->
-            val newText = textView?.text.toString().trim()
-            when (client.state) {
-                WAITING_FOR_OFFER -> client.processOffer(newText)
-                WAITING_FOR_ANSWER -> client.processAnswer(newText)
-                CHAT_ESTABLISHED -> {
-                    if (newText.isNotBlank()) {
-                        client.sendMessage(newText)
-                        console.printf("&gt;$newText")
-                    }
-                }
-                else -> if (newText.isNotBlank()) console.printf(newText)
-            }
-            textView?.text = ""
+            sendMessage()
             true
         }
+    }
+
+    private fun sendMessage() {
+        val newText = edEnterArea.text.toString().trim()
+        when (client.state) {
+            WAITING_FOR_OFFER -> client.processOffer(newText)
+            WAITING_FOR_ANSWER -> client.processAnswer(newText)
+            CHAT_ESTABLISHED -> {
+                if (newText.isNotBlank()) {
+                    client.sendMessage(newText)
+                    console.printf("&gt;$newText")
+                }
+            }
+            else -> if (newText.isNotBlank()) console.printf(newText)
+        }
+        edEnterArea.setText("")
     }
 
     override fun onRetainCustomNonConfigurationInstance(): Any? {

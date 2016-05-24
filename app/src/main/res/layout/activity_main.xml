@@ -27,8 +27,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_toLeftOf="@+id/btSubmit"
+            android:layout_toStartOf="@+id/btSubmit"/>
 
     <ProgressBar
             style="?android:attr/progressBarStyle"
@@ -39,5 +39,14 @@
             android:layout_alignBottom="@+id/edEnterArea"
             android:layout_alignRight="@+id/edEnterArea"
             android:layout_alignEnd="@+id/edEnterArea"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:id="@+id/btSubmit"
+            android:layout_below="@+id/recyclerView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>
