@@ -1,7 +1,7 @@
 # serverless-webrtc-android
 A demo of using WebRTC with no signaling server. But for Android written in Kotlin.
 
-Compatibile and inspired by this project written for JavaScript by Chris Ball:
+Compatible and inspired by this project written for JavaScript by Chris Ball:
 * http://blog.printf.net/articles/2013/05/17/webrtc-without-a-signaling-server/
 * http://blog.printf.net/articles/2014/07/01/serverless-webrtc-continued
 * https://cjb.github.io/serverless-webrtc/serverless-webrtc.html
@@ -12,13 +12,13 @@ It's technology for real time peer to peer comunication. Especially useful for t
 WebRTC is supported in recent Chrome browser, Node.js and also on Android/iOS.
 
 # How it works?
-WebRTC requires two data payloads to be transfered between parties, it's called [*SDP*](https://en.wikipedia.org/wiki/Session_Description_Protocol) (sesssion description protocol). One is called *offer* and the second is *answer*.
+WebRTC requires two data payloads to be transferred between parties, it's called [*SDP*](https://en.wikipedia.org/wiki/Session_Description_Protocol) (sesssion description protocol). One is called *offer* and the second is *answer*.
 
-You can either create offer and send it to other party or wait for offer to be delivered to you.
+You can either create an offer and send it to other party or wait for an offer to be delivered to you.
 Usually SDP handshakes are done by special signalling server, but in this case we are not using any, so you'll need to pass SDPs manually by e.g. e-mail.
 
-If it's running IPv4, it's very unlikely that both parties will have public IP address or it will be in the same network.
-SDP requires you'll need to pass external IP address there, this is done automatically by process called ICE gathering. It uses two types of external servers - [STUN](https://en.wikipedia.org/wiki/STUN) and [TURN](https://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT).
+If it's running IPv4, it's very unlikely that both parties will have a public IP address or it will be on the same network.
+SDP requires that you'll need to pass external IP address there, this is done automatically by process called ICE gathering. It uses two types of external servers - [STUN](https://en.wikipedia.org/wiki/STUN) and [TURN](https://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT).
 We are using only STUN here, but it should work with TURN as well (and even better).
 It can even punch through some NAT mechanisms.
 
