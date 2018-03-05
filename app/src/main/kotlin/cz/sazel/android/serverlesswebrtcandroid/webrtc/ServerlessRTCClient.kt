@@ -19,7 +19,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
     var channel: DataChannel? = null
 
     /**
-     * List of servers that will be used to estabilish the direct connection, STUN/TURN should be supported.
+     * List of servers that will be used to establish the direct connection, STUN/TURN should be supported.
      */
     val iceServers = arrayListOf(PeerConnection.IceServer("stun:stun.l.google.com:19302"))
 
@@ -84,7 +84,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
     inner abstract class DefaultObserver : PeerConnection.Observer {
 
         override fun onDataChannel(p0: DataChannel?) {
-            console.d("data channel ${p0?.label()} estabilished")
+            console.d("data channel ${p0?.label()} established")
         }
 
         override fun onIceConnectionReceivingChange(p0: Boolean) {
@@ -116,7 +116,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         }
 
         override fun onRenegotiationNeeded() {
-            console.d("renegotiation neeeded")
+            console.d("renegotiation needed")
         }
     }
 
@@ -185,7 +185,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
     private val JSON_SDP = "sdp"
 
     /**
-     * Converts session desription object to JSON object that can be used in other applications.
+     * Converts session description object to JSON object that can be used in other applications.
      * This is what is passed between parties to maintain connection. We need to pass the session description to the other side.
      * In normal use case we should use some kind of signalling server, but for this demo you can use some other method to pass it there (like e-mail).
      */
