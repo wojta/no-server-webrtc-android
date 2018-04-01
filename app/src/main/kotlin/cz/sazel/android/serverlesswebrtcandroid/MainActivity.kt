@@ -41,7 +41,11 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
         val retainedClient = lastCustomNonConfigurationInstance as ServerlessRTCClient?
         if (retainedClient == null) {
             client = ServerlessRTCClient(console, this, this)
-            client.init()
+            try {
+                client.init()
+            } catch (e:Exception) {
+
+            }
         } else {
             client = retainedClient
             onStateChanged(client.state)

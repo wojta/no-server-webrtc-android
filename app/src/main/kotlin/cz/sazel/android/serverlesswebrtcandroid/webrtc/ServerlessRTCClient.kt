@@ -23,7 +23,6 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
      */
     val iceServers = arrayListOf(PeerConnection.IceServer("stun:stun.l.google.com:19302"))
 
-
     enum class State {
         /**
          * Initialization in progress.
@@ -218,6 +217,14 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
                 val offer = SessionDescription(SessionDescription.Type.OFFER, sdp)
                 pcInitialized = true
                 pc = pcf.createPeerConnection(iceServers, pcConstraints, object : DefaultObserver() {
+                    override fun onIceCandidatesRemoved(p0: Array<out IceCandidate>?) {
+                        p0?.forEach { console.d("ice candidates removed: {${it.serverUrl}") }
+                    }
+
+                    override fun onAddTrack(p0: RtpReceiver?, p1: Array<out MediaStream>?) {
+                        console.d("onAddTrack")
+                    }
+
                     override fun onIceCandidate(p0: IceCandidate?) {
                         console.d("ice candidate:{${p0?.sdp}}")
                     }
@@ -238,7 +245,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
                     }
 
 
-                })
+                })!!
 
                 //we have remote offer, let's create answer for that
                 pc.setRemoteDescription(object : DefaultSdpObserver() {
@@ -289,7 +296,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
 
     private fun doShowAnswer(sdp: SessionDescription) {
         console.printf("Here is your answer:");
-        console.greenf("${sessionDescriptionToJSON(sdp).toString()}");
+        console.greenf("${sessionDescriptionToJSON(sdp)}");
     }
 
     /**
@@ -299,6 +306,14 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         state = State.CREATING_OFFER
         pcInitialized = true
         pc = pcf.createPeerConnection(iceServers, pcConstraints, object : DefaultObserver() {
+            override fun onIceCandidatesRemoved(p0: Array<out IceCandidate>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onAddTrack(p0: RtpReceiver?, p1: Array<out MediaStream>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
             override fun onIceCandidate(p0: IceCandidate?) {
                 console.d("ice candidate:{${p0?.sdp}}")
             }
@@ -307,11 +322,11 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
                 super.onIceGatheringChange(p0)
                 if (p0 == PeerConnection.IceGatheringState.COMPLETE) {
                     console.printf("Your offer is:");
-                    console.greenf("${sessionDescriptionToJSON(pc.localDescription).toString()}");
+                    console.greenf("${sessionDescriptionToJSON(pc.localDescription)}")
                     state = State.WAITING_FOR_ANSWER
                 }
             }
-        })
+        })!!
         makeDataChannel()
         pc.createOffer(object : DefaultSdpObserver() {
             override fun onCreateSuccess(p0: SessionDescription?) {
@@ -353,9 +368,9 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
      * Call this before using anything else from PeerConnection.
      */
     fun init() {
-        PeerConnectionFactory.initializeAndroidGlobals(
-                context, true, false, false)
-        pcf = PeerConnectionFactory()
+        //PeerConnectionFactory.initializeAndroidGlobals(context,false)
+        val options=PeerConnectionFactory.Options()
+        pcf = PeerConnectionFactory.builder().setOptions(options).createPeerConnectionFactory()
         state = State.INITIALIZING
     }
 
