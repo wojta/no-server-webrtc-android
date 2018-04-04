@@ -80,7 +80,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         fun onStateChanged(state: State)
     }
 
-    inner abstract class DefaultObserver : PeerConnection.Observer {
+    abstract inner class DefaultObserver : PeerConnection.Observer {
 
         override fun onDataChannel(p0: DataChannel?) {
             console.d("data channel ${p0?.label()} established")
@@ -119,7 +119,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         }
     }
 
-    inner open class DefaultSdpObserver : SdpObserver {
+    open inner class DefaultSdpObserver : SdpObserver {
 
         override fun onCreateSuccess(p0: SessionDescription?) {
 
@@ -142,7 +142,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
 
     private val UTF_8 = Charset.forName("UTF-8")
 
-    inner open class DefaultDataChannelObserver(val channel: DataChannel) : DataChannel.Observer {
+    open inner class DefaultDataChannelObserver(val channel: DataChannel) : DataChannel.Observer {
 
 
         //TODO I'm not sure if this would handle really long messages
@@ -368,7 +368,8 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
      * Call this before using anything else from PeerConnection.
      */
     fun init() {
-        //PeerConnectionFactory.initializeAndroidGlobals(context,false)
+        val initializeOptions=PeerConnectionFactory.InitializationOptions.builder(context).setEnableVideoHwAcceleration(false).setEnableInternalTracer(false).createInitializationOptions()
+        PeerConnectionFactory.initialize(initializeOptions)
         val options=PeerConnectionFactory.Options()
         pcf = PeerConnectionFactory.builder().setOptions(options).createPeerConnectionFactory()
         state = State.INITIALIZING
