@@ -7,9 +7,9 @@ import cz.sazel.android.serverlesswebrtcandroid.BuildConfig
  */
 interface IConsole {
 
-    fun printf(text: String, vararg args: Any);
+    fun printf(text: String, vararg args: Any)
 
-    fun printf(resId: Int, vararg args: Any);
+    fun printf(resId: Int, vararg args: Any)
 
     fun d(text: String, vararg args: Any) {
         if (BuildConfig.DEBUG) printf("<font color=\"#AAAAAA\">$text</font>")

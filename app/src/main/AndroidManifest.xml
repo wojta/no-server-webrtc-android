@@ -3,10 +3,6 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="cz.sazel.android.serverlesswebrtcandroid">
 
-    <uses-sdk
-            android:minSdkVersion="10"
-            tools:overrideLibrary="io.pristine.libjingle"/>
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -26,11 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <service
-                android:name=".service.IntentService"
-                android:exported="false">
-        </service>
     </application>
 
 </manifest>

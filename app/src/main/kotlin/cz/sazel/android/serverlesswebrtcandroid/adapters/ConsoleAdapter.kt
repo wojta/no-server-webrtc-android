@@ -15,38 +15,33 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import cz.sazel.android.serverlesswebrtcandroid.R
 import org.jetbrains.anko.find
-import org.jetbrains.anko.onLongClick
 
 /**
  * This is just to do the printing into the RecyclerView.
  */
 class ConsoleAdapter(val items: List<String>) : RecyclerView.Adapter<ConsoleAdapter.ConsoleVH>() {
 
-    override fun onBindViewHolder(holder: ConsoleVH?, position: Int) {
-        holder?.tvText?.text = Html.fromHtml(items[position])
+    @Suppress("DEPRECATION")
+    override fun onBindViewHolder(holder: ConsoleVH, position: Int) {
+        holder.tvText.text = Html.fromHtml(items[position])
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConsoleVH {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.l_item, parent, false)
+        return ConsoleVH(view)
     }
 
     override fun getItemCount(): Int = items.count()
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ConsoleVH {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.l_item, parent, false)
-        return ConsoleVH(view)
-    }
-
     class ConsoleVH(view: View) : RecyclerView.ViewHolder(view) {
-        lateinit var tvText: TextView
+        var tvText: TextView = view.find(R.id.tvText)
 
         init {
-            tvText = view.find(R.id.tvText)
-            tvText.onLongClick { //clipboard on long touch
+            tvText.setOnLongClickListener {
+                //clipboard on long touch
                 val text = tvText.text.toString()
-                if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-                    val clipboard = tvText.context.getSystemService(Context.CLIPBOARD_SERVICE) as android.text.ClipboardManager;
-                    clipboard.text = text;
-                } else {
-                    val clipboard = tvText.context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager;
-                    clipboard.primaryClip = ClipData.newPlainText("text", text);
-                }
+                val clipboard = tvText.context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                clipboard.primaryClip = ClipData.newPlainText("text", text)
                 Toast.makeText(tvText.context, R.string.clipboard_copy, LENGTH_SHORT).show()
                 true
             }

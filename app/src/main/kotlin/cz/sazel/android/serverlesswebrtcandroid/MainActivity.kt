@@ -6,16 +6,15 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import cz.sazel.android.serverlesswebrtcandroid.R.layout.activity_main
 import cz.sazel.android.serverlesswebrtcandroid.console.RecyclerViewConsole
 import cz.sazel.android.serverlesswebrtcandroid.webrtc.ServerlessRTCClient
 import cz.sazel.android.serverlesswebrtcandroid.webrtc.ServerlessRTCClient.State.*
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.enabled
-import org.jetbrains.anko.onClick
-import org.jetbrains.anko.onEditorAction
 
 class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -34,25 +33,35 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-
         layoutManager.stackFromEnd = true
         console = RecyclerViewConsole(recyclerView)
         console.initialize(savedInstanceState)
+        recyclerView.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if (bottom < oldBottom) {
+                recyclerView.postDelayed({ recyclerView.smoothScrollToPosition(console.lines.size) }, 100)
+            }
+        }
         val retainedClient = lastCustomNonConfigurationInstance as ServerlessRTCClient?
         if (retainedClient == null) {
-            client = ServerlessRTCClient(console, this, this)
-            client.init()
+            client = ServerlessRTCClient(console, applicationContext, this)
+            try {
+                client.init()
+            } catch (e:Exception) {
+                Toast.makeText(this,e.message,Toast.LENGTH_LONG).show()
+                e.printStackTrace()
+            }
         } else {
             client = retainedClient
             onStateChanged(client.state)
         }
 
-        btSubmit.onClick { sendMessage() }
-        edEnterArea.onEditorAction { textView, i, keyEvent ->
+        btSubmit.setOnClickListener { sendMessage() }
+        edEnterArea.setOnEditorActionListener { _, _, _->
             sendMessage()
             true
         }
     }
+
 
     private fun sendMessage() {
         val newText = edEnterArea.text.toString().trim()
@@ -99,7 +108,7 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
     override fun onStateChanged(state: ServerlessRTCClient.State) {
         //it could be in different thread
         runOnUiThread {
-            edEnterArea.enabled = true
+            edEnterArea.isEnabled = true
             progressBar.visibility = GONE
             mnuCreateOffer?.isVisible = false
             when (state) {
@@ -113,9 +122,8 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
                 WAITING_TO_CONNECT, CREATING_OFFER, CREATING_ANSWER -> {
                     progressBar.visibility = VISIBLE
                     if (BuildConfig.DEBUG) edEnterArea.hint = state.name
-                    edEnterArea.enabled = false
+                    edEnterArea.isEnabled = false
                 }
-                else -> Unit
             }
         }
     }

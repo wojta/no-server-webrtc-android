@@ -13,7 +13,7 @@ import java.util.*
 class RecyclerViewConsole(val view: RecyclerView) : IConsole {
 
     lateinit var lines: ArrayList<String>
-    private val SAVE_LINES = "SAVE_LINES";
+    private val SAVE_LINES = "SAVE_LINES"
 
     lateinit private var handler: Handler
 
@@ -31,7 +31,7 @@ class RecyclerViewConsole(val view: RecyclerView) : IConsole {
 
 
     fun onSaveInstanceState(bundle: Bundle) {
-        bundle.putStringArrayList(SAVE_LINES, lines);
+        bundle.putStringArrayList(SAVE_LINES, lines)
     }
 
 
