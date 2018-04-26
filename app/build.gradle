@@ -28,9 +28,10 @@ sourceCompatibility= 1.7
 targetCompatibility= 1.7
 
 ext {
-    support_version="27.1.0"
+    support_version="27.1.1"
     anko_version='0.10.4'
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -43,4 +44,5 @@ dependencies {
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
     // For appcompat-v7 bindings
     implementation "com.android.support:recyclerview-v7:$support_version"
+    implementation 'cz.sazel.android:libjingle:23022'
 }

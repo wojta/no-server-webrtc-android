@@ -2,9 +2,9 @@
     <string name="app_name">Serverless WebRTC Android</string>
     <string name="send">Send</string>
     <string name="create_offer">Create offer</string>
-    <string name="clipboard_copy">Content of message has been put into clipboard.</string>
+    <string name="clipboard_copy">Content of the message has been put into clipboard.</string>
     <string name="hint_paste_offer">Please paste your offer</string>
     <string name="hint_paste_answer">Please paste your answer</string>
-    <string name="enter_message">Enter message</string>
+    <string name="enter_message">Enter some message</string>
     <string name="submit">Submit</string>
 </resources>

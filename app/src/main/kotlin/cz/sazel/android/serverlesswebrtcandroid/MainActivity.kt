@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -32,10 +33,14 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-
         layoutManager.stackFromEnd = true
         console = RecyclerViewConsole(recyclerView)
         console.initialize(savedInstanceState)
+        recyclerView.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if (bottom < oldBottom) {
+                recyclerView.postDelayed({ recyclerView.smoothScrollToPosition(console.lines.size) }, 100)
+            }
+        }
         val retainedClient = lastCustomNonConfigurationInstance as ServerlessRTCClient?
         if (retainedClient == null) {
             client = ServerlessRTCClient(console, applicationContext, this)
@@ -56,6 +61,7 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
             true
         }
     }
+
 
     private fun sendMessage() {
         val newText = edEnterArea.text.toString().trim()

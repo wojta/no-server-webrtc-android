@@ -24,6 +24,7 @@
             android:ems="10"
             android:id="@+id/edEnterArea"
             android:imeActionLabel="@string/send"
+            android:layout_marginTop="@dimen/mat16"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -46,6 +47,7 @@
             android:text="@string/submit"
             android:id="@+id/btSubmit"
             android:layout_below="@+id/recyclerView"
+            android:layout_alignTop="@+id/edEnterArea"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
 

@@ -218,7 +218,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
                 pcInitialized = true
                 pc = pcf.createPeerConnection(iceServers, pcConstraints, object : DefaultObserver() {
                     override fun onIceCandidatesRemoved(p0: Array<out IceCandidate>?) {
-                        p0?.forEach { console.d("ice candidates removed: {${it.serverUrl}") }
+                        p0?.forEach { console.d("ice candidatesremoved: {${it.serverUrl}") }
                     }
 
                     override fun onAddTrack(p0: RtpReceiver?, p1: Array<out MediaStream>?) {
@@ -295,8 +295,8 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
     }
 
     private fun doShowAnswer(sdp: SessionDescription) {
-        console.printf("Here is your answer:");
-        console.greenf("${sessionDescriptionToJSON(sdp)}");
+        console.printf("Here is your answer:")
+        console.greenf("${sessionDescriptionToJSON(sdp)}")
     }
 
     /**
@@ -321,7 +321,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
             override fun onIceGatheringChange(p0: PeerConnection.IceGatheringState?) {
                 super.onIceGatheringChange(p0)
                 if (p0 == PeerConnection.IceGatheringState.COMPLETE) {
-                    console.printf("Your offer is:");
+                    console.printf("Your offer is:")
                     console.greenf("${sessionDescriptionToJSON(pc.localDescription)}")
                     state = State.WAITING_FOR_ANSWER
                 }
@@ -331,14 +331,14 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         pc.createOffer(object : DefaultSdpObserver() {
             override fun onCreateSuccess(p0: SessionDescription?) {
                 if (p0 != null) {
-                    console.d("offer updated");
+                    console.d("offer updated")
                     pc.setLocalDescription(object : DefaultSdpObserver() {
                         override fun onCreateSuccess(p0: SessionDescription?) {
                         }
                     }, p0)
                 }
             }
-        }, pcConstraints);
+        }, pcConstraints)
     }
 
     /**
@@ -360,7 +360,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
      */
     fun makeDataChannel() {
         val init = DataChannel.Init()
-        channel = pc.createDataChannel("test", init);
+        channel = pc.createDataChannel("test", init)
         channel!!.registerObserver(DefaultDataChannelObserver(channel!!))
     }
 
