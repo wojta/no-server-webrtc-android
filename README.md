@@ -1,5 +1,5 @@
 # serverless-webrtc-android
-[![CircleCI](https://circleci.com/gh/wojta/serverless-webrtc-android.svg?style=svg)](https://circleci.com/gh/wojta/serverless-webrtc-android)
+[![CircleCI](https://circleci.com/gh/wojta/no-server-webrtc-android.svg?style=svg)](https://circleci.com/gh/wojta/no-server-webrtc-android)
 
 A demo of using WebRTC with no signaling server. But for Android written in Kotlin.
 
