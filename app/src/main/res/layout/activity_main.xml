@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:paddingLeft="@dimen/mat16"
         android:paddingRight="@dimen/mat16"
         android:paddingTop="@dimen/mat16"
         android:paddingBottom="@dimen/mat16"
         tools:context="cz.sazel.android.serverlesswebrtcandroid.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/edEnterArea"
             android:layout_alignParentTop="true"
+            app:stackFromEnd="true"
             android:id="@+id/recyclerView"/>
 
     <EditText
