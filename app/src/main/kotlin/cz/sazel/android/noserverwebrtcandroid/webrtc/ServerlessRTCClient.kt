@@ -1,7 +1,7 @@
-package cz.sazel.android.serverlesswebrtcandroid.webrtc
+package cz.sazel.android.noserverwebrtcandroid.webrtc
 
 import android.content.Context
-import cz.sazel.android.serverlesswebrtcandroid.console.IConsole
+import cz.sazel.android.noserverwebrtcandroid.console.IConsole
 import org.json.JSONException
 import org.json.JSONObject
 import org.webrtc.*

@@ -1,4 +1,4 @@
-package cz.sazel.android.serverlesswebrtcandroid.adapters
+package cz.sazel.android.noserverwebrtcandroid.adapters
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -11,7 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.recyclerview.widget.RecyclerView
-import cz.sazel.android.serverlesswebrtcandroid.R
+import cz.sazel.android.noserverwebrtcandroid.R
 
 /**
  * This is just to do the printing into the RecyclerView.

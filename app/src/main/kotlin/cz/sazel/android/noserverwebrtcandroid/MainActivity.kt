@@ -1,4 +1,4 @@
-package cz.sazel.android.serverlesswebrtcandroid
+package cz.sazel.android.noserverwebrtcandroid
 
 import android.os.Bundle
 import android.view.Menu
@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.sazel.android.serverlesswebrtcandroid.console.RecyclerViewConsole
-import cz.sazel.android.serverlesswebrtcandroid.databinding.ActivityMainBinding
-import cz.sazel.android.serverlesswebrtcandroid.webrtc.ServerlessRTCClient
-import cz.sazel.android.serverlesswebrtcandroid.webrtc.ServerlessRTCClient.State.*
+import cz.sazel.android.noserverwebrtcandroid.console.RecyclerViewConsole
+import cz.sazel.android.noserverwebrtcandroid.databinding.ActivityMainBinding
+import cz.sazel.android.noserverwebrtcandroid.webrtc.ServerlessRTCClient
+import cz.sazel.android.noserverwebrtcandroid.webrtc.ServerlessRTCClient.State.*
 
 
 class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListener, ActivityCompat.OnRequestPermissionsResultCallback {

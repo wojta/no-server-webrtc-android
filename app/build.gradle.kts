@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "cz.sazel.android.serverlesswebrtcandroid"
+    namespace = "cz.sazel.android.noserverwebrtcandroid"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "cz.sazel.android.serverlesswebrtcandroid"
+        applicationId = "cz.sazel.android.noserverwebrtcandroid"
         minSdk = 23
         targetSdk = 37
         versionCode = 1200
