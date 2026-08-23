@@ -11,8 +11,8 @@ android {
         applicationId = "cz.sazel.android.noserverwebrtcandroid"
         minSdk = 23
         targetSdk = 37
-        versionCode = 1200
-        versionName = "1.2"
+        versionCode = 1300
+        versionName = "1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
