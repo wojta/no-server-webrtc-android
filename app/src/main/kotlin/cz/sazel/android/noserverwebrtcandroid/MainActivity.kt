@@ -8,6 +8,10 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.sazel.android.noserverwebrtcandroid.console.RecyclerViewConsole
 import cz.sazel.android.noserverwebrtcandroid.databinding.ActivityMainBinding
@@ -29,8 +33,22 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val basePadding = binding.root.paddingLeft
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime())
+            view.updatePadding(
+                left = basePadding + bars.left,
+                top = basePadding + bars.top,
+                right = basePadding + bars.right,
+                bottom = basePadding + bars.bottom
+            )
+            insets
+        }
+
         val layoutManager = LinearLayoutManager(this)
 
         binding.recyclerView.layoutManager = layoutManager
