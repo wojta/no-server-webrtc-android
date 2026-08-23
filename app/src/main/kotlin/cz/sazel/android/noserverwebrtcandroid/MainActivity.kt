@@ -1,4 +1,4 @@
-package cz.sazel.android.serverlesswebrtcandroid
+package cz.sazel.android.noserverwebrtcandroid
 
 import android.os.Bundle
 import android.view.Menu
@@ -8,11 +8,15 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.sazel.android.serverlesswebrtcandroid.console.RecyclerViewConsole
-import cz.sazel.android.serverlesswebrtcandroid.databinding.ActivityMainBinding
-import cz.sazel.android.serverlesswebrtcandroid.webrtc.ServerlessRTCClient
-import cz.sazel.android.serverlesswebrtcandroid.webrtc.ServerlessRTCClient.State.*
+import cz.sazel.android.noserverwebrtcandroid.console.RecyclerViewConsole
+import cz.sazel.android.noserverwebrtcandroid.databinding.ActivityMainBinding
+import cz.sazel.android.noserverwebrtcandroid.webrtc.ServerlessRTCClient
+import cz.sazel.android.noserverwebrtcandroid.webrtc.ServerlessRTCClient.State.*
 
 
 class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -29,8 +33,22 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val basePadding = binding.root.paddingLeft
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime())
+            view.updatePadding(
+                left = basePadding + bars.left,
+                top = basePadding + bars.top,
+                right = basePadding + bars.right,
+                bottom = basePadding + bars.bottom
+            )
+            insets
+        }
+
         val layoutManager = LinearLayoutManager(this)
 
         binding.recyclerView.layoutManager = layoutManager
@@ -94,8 +112,8 @@ class MainActivity : AppCompatActivity(), ServerlessRTCClient.IStateChangeListen
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.mnuCreateOffer -> client.makeOffer()
         }
 

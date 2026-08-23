@@ -8,7 +8,7 @@
         android:paddingRight="@dimen/mat16"
         android:paddingTop="@dimen/mat16"
         android:paddingBottom="@dimen/mat16"
-        tools:context="cz.sazel.android.serverlesswebrtcandroid.MainActivity">
+        tools:context="cz.sazel.android.noserverwebrtcandroid.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

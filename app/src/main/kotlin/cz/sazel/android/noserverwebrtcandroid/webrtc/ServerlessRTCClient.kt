@@ -1,12 +1,15 @@
-package cz.sazel.android.serverlesswebrtcandroid.webrtc
+package cz.sazel.android.noserverwebrtcandroid.webrtc
 
 import android.content.Context
-import cz.sazel.android.serverlesswebrtcandroid.console.IConsole
+import android.os.Handler
+import android.os.Looper
+import cz.sazel.android.noserverwebrtcandroid.console.IConsole
 import org.json.JSONException
 import org.json.JSONObject
 import org.webrtc.*
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * This class handles all around WebRTC peer connections.
@@ -19,9 +22,36 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
     var channel: DataChannel? = null
 
     /**
+     * How long we wait for ICE gathering to finish before giving up on the slowest STUN servers
+     * and showing the offer/answer with whatever candidates were gathered so far.
+     */
+    private val iceGatheringTimeoutMs = 5000L
+    private val timeoutHandler = Handler(Looper.getMainLooper())
+    private var iceGatheringTimeoutRunnable: Runnable? = null
+    private val answerShown = AtomicBoolean(false)
+    private val offerShown = AtomicBoolean(false)
+
+    private fun scheduleIceGatheringTimeout(onTimeout: () -> Unit) {
+        val runnable = Runnable { onTimeout() }
+        iceGatheringTimeoutRunnable = runnable
+        timeoutHandler.postDelayed(runnable, iceGatheringTimeoutMs)
+    }
+
+    private fun cancelIceGatheringTimeout() {
+        iceGatheringTimeoutRunnable?.let { timeoutHandler.removeCallbacks(it) }
+        iceGatheringTimeoutRunnable = null
+    }
+
+    /**
      * List of servers that will be used to establish the direct connection, STUN/TURN should be supported.
      */
-    val iceServers = arrayListOf(PeerConnection.IceServer("stun:stun.l.google.com:19302"))
+    val iceServers = arrayListOf(
+        PeerConnection.IceServer("stun:stun1.l.google.com:19302"),
+        PeerConnection.IceServer("stun:stun.l.google.com:19302"),
+        PeerConnection.IceServer("stun:stun2.l.google.com:19302"),
+        PeerConnection.IceServer("stun:stun3.l.google.com:19302"),
+        PeerConnection.IceServer("stun:stun4.l.google.com:19302")
+    )
 
     enum class State {
         /**
@@ -216,6 +246,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
             if (type != null && sdp != null && type == "offer") {
                 val offer = SessionDescription(SessionDescription.Type.OFFER, sdp)
                 pcInitialized = true
+                answerShown.set(false)
                 pc = pcf.createPeerConnection(iceServers, pcConstraints, object : DefaultObserver() {
                     override fun onIceCandidatesRemoved(p0: Array<out IceCandidate>?) {
                         p0?.forEach { console.d("ice candidatesremoved: {${it.serverUrl}") }
@@ -233,8 +264,8 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
                         super.onIceGatheringChange(p0)
                         //ICE gathering complete, we should have answer now
                         if (p0 == PeerConnection.IceGatheringState.COMPLETE) {
-                            doShowAnswer(pc.localDescription)
-                            state = State.WAITING_TO_CONNECT
+                            cancelIceGatheringTimeout()
+                            showAnswerOnce()
                         }
                     }
 
@@ -246,6 +277,10 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
 
 
                 })!!
+                scheduleIceGatheringTimeout {
+                    console.d("ICE gathering timeout, showing answer with candidates gathered so far")
+                    showAnswerOnce()
+                }
 
                 //we have remote offer, let's create answer for that
                 pc.setRemoteDescription(object : DefaultSdpObserver() {
@@ -299,12 +334,28 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         console.greenf("${sessionDescriptionToJSON(sdp)}")
     }
 
+    private fun showAnswerOnce() {
+        if (answerShown.compareAndSet(false, true)) {
+            doShowAnswer(pc.localDescription)
+            state = State.WAITING_TO_CONNECT
+        }
+    }
+
+    private fun showOfferOnce() {
+        if (offerShown.compareAndSet(false, true)) {
+            console.printf("Your offer is:")
+            console.greenf("${sessionDescriptionToJSON(pc.localDescription)}")
+            state = State.WAITING_FOR_ANSWER
+        }
+    }
+
     /**
      * App creates the offer.
      */
     fun makeOffer() {
         state = State.CREATING_OFFER
         pcInitialized = true
+        offerShown.set(false)
         pc = pcf.createPeerConnection(iceServers, pcConstraints, object : DefaultObserver() {
             override fun onIceCandidatesRemoved(p0: Array<out IceCandidate>?) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -321,12 +372,15 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
             override fun onIceGatheringChange(p0: PeerConnection.IceGatheringState?) {
                 super.onIceGatheringChange(p0)
                 if (p0 == PeerConnection.IceGatheringState.COMPLETE) {
-                    console.printf("Your offer is:")
-                    console.greenf("${sessionDescriptionToJSON(pc.localDescription)}")
-                    state = State.WAITING_FOR_ANSWER
+                    cancelIceGatheringTimeout()
+                    showOfferOnce()
                 }
             }
         })!!
+        scheduleIceGatheringTimeout {
+            console.d("ICE gathering timeout, showing offer with candidates gathered so far")
+            showOfferOnce()
+        }
         makeDataChannel()
         pc.createOffer(object : DefaultSdpObserver() {
             override fun onCreateSuccess(p0: SessionDescription?) {
@@ -368,7 +422,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
      * Call this before using anything else from PeerConnection.
      */
     fun init() {
-        val initializeOptions=PeerConnectionFactory.InitializationOptions.builder(context).setEnableVideoHwAcceleration(false).setEnableInternalTracer(false).createInitializationOptions()
+        val initializeOptions=PeerConnectionFactory.InitializationOptions.builder(context).setEnableInternalTracer(false).createInitializationOptions()
         PeerConnectionFactory.initialize(initializeOptions)
         val options=PeerConnectionFactory.Options()
         pcf = PeerConnectionFactory.builder().setOptions(options).createPeerConnectionFactory()
@@ -380,6 +434,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
      * Clean up some resources.
      */
     fun destroy() {
+        cancelIceGatheringTimeout()
         channel?.close()
         if (pcInitialized) {
             pc.close()

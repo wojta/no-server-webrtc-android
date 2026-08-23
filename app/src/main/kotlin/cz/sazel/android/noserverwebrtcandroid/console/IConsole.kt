@@ -1,6 +1,6 @@
-package cz.sazel.android.serverlesswebrtcandroid.console
+package cz.sazel.android.noserverwebrtcandroid.console
 
-import cz.sazel.android.serverlesswebrtcandroid.BuildConfig
+import cz.sazel.android.noserverwebrtcandroid.BuildConfig
 
 /**
  * Created on 7.5.16.

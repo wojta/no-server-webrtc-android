@@ -1,10 +1,10 @@
-package cz.sazel.android.serverlesswebrtcandroid.console
+package cz.sazel.android.noserverwebrtcandroid.console
 
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.recyclerview.widget.RecyclerView
-import cz.sazel.android.serverlesswebrtcandroid.adapters.ConsoleAdapter
+import cz.sazel.android.noserverwebrtcandroid.adapters.ConsoleAdapter
 import java.util.*
 
 /**
