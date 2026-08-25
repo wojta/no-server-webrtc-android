@@ -8,6 +8,12 @@
             app:showAsAction="ifRoom"
             />
     <item
+            android:id="@+id/mnuReset"
+            android:title="@string/reset"
+            android:icon="@drawable/reset"
+            app:showAsAction="ifRoom"
+            />
+    <item
             android:id="@+id/mnuTurnSettings"
             android:title="@string/turn_settings"
             android:icon="@drawable/turn_server"

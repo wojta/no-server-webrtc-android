@@ -86,6 +86,12 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
+            R.id.mnuReset -> {
+                viewModel.reset()
+                binding.edEnterArea.setText("")
+                true
+            }
+
             R.id.mnuTurnSettings -> {
                 TurnSettingsDialogFragment().show(supportFragmentManager, TurnSettingsDialogFragment.TAG)
                 true
