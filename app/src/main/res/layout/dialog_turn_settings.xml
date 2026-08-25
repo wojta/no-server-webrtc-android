@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mat16"
+        android:paddingRight="@dimen/mat16"
+        android:paddingTop="@dimen/mat16">
+
+    <EditText
+            android:id="@+id/edTurnHost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/turn_host_hint"
+            android:importantForAutofill="no"
+            android:inputType="textUri"
+            android:maxLines="1"/>
+
+    <EditText
+            android:id="@+id/edTurnUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/turn_username_hint"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="1"/>
+
+    <EditText
+            android:id="@+id/edTurnPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/turn_password_hint"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:maxLines="1"/>
+
+</LinearLayout>

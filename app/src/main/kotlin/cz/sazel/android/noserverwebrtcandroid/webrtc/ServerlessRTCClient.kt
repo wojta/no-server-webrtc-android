@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import cz.sazel.android.noserverwebrtcandroid.console.IConsole
+import cz.sazel.android.noserverwebrtcandroid.settings.TurnSettings
 import org.json.JSONException
 import org.json.JSONObject
 import org.webrtc.*
@@ -43,15 +44,26 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
     }
 
     /**
-     * List of servers that will be used to establish the direct connection, STUN/TURN should be supported.
+     * Public STUN servers that are always used to discover the public address of this device.
      */
-    val iceServers = arrayListOf(
+    private val stunServers = listOf(
         PeerConnection.IceServer("stun:stun1.l.google.com:19302"),
         PeerConnection.IceServer("stun:stun.l.google.com:19302"),
         PeerConnection.IceServer("stun:stun2.l.google.com:19302"),
         PeerConnection.IceServer("stun:stun3.l.google.com:19302"),
         PeerConnection.IceServer("stun:stun4.l.google.com:19302")
     )
+
+    /**
+     * TURN server entered by the user, taken into account the next time a peer connection is created.
+     */
+    var turnSettings: TurnSettings = TurnSettings.NONE
+
+    /**
+     * List of servers that will be used to establish the direct connection, STUN/TURN should be supported.
+     */
+    private val iceServers: List<PeerConnection.IceServer>
+        get() = stunServers + listOfNotNull(turnSettings.takeIf { it.isConfigured }?.toIceServer())
 
     enum class State {
         /**
@@ -358,11 +370,11 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         offerShown.set(false)
         pc = pcf.createPeerConnection(iceServers, pcConstraints, object : DefaultObserver() {
             override fun onIceCandidatesRemoved(p0: Array<out IceCandidate>?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                console.d("ice candidates removed: ${p0?.joinToString { it.serverUrl }}")
             }
 
             override fun onAddTrack(p0: RtpReceiver?, p1: Array<out MediaStream>?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                console.d("onAddTrack")
             }
 
             override fun onIceCandidate(p0: IceCandidate?) {

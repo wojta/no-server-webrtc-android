@@ -7,4 +7,10 @@
             android:icon="@drawable/json"
             app:showAsAction="ifRoom"
             />
+    <item
+            android:id="@+id/mnuTurnSettings"
+            android:title="@string/turn_settings"
+            android:icon="@drawable/turn_server"
+            app:showAsAction="ifRoom"
+            />
 </menu>

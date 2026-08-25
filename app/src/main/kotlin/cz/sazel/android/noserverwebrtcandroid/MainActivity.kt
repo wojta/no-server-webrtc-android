@@ -20,6 +20,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.sazel.android.noserverwebrtcandroid.adapters.ConsoleAdapter
 import cz.sazel.android.noserverwebrtcandroid.databinding.ActivityMainBinding
+import cz.sazel.android.noserverwebrtcandroid.settings.TurnSettingsDialogFragment
 import cz.sazel.android.noserverwebrtcandroid.webrtc.ServerlessRTCClient.State
 import kotlinx.coroutines.launch
 
@@ -79,12 +80,18 @@ class MainActivity : AppCompatActivity() {
             menu.findItem(R.id.mnuCreateOffer).isVisible = viewModel.state.value == State.WAITING_FOR_OFFER
         }
 
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-            val createOffer = menuItem.itemId == R.id.mnuCreateOffer
-            if (createOffer) {
+        override fun onMenuItemSelected(menuItem: MenuItem) = when (menuItem.itemId) {
+            R.id.mnuCreateOffer -> {
                 viewModel.makeOffer()
+                true
             }
-            return createOffer
+
+            R.id.mnuTurnSettings -> {
+                TurnSettingsDialogFragment().show(supportFragmentManager, TurnSettingsDialogFragment.TAG)
+                true
+            }
+
+            else -> false
         }
     })
 
