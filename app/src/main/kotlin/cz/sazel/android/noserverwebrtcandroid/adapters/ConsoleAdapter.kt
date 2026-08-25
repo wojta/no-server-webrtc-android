@@ -16,7 +16,7 @@ import cz.sazel.android.noserverwebrtcandroid.R
 /**
  * This is just to do the printing into the RecyclerView.
  */
-class ConsoleAdapter(val items: List<String>) : RecyclerView.Adapter<ConsoleAdapter.ConsoleVH>() {
+class ConsoleAdapter(var items: List<String>) : RecyclerView.Adapter<ConsoleAdapter.ConsoleVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConsoleVH {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.l_item, parent, false)
