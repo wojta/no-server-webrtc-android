@@ -3,6 +3,7 @@ package cz.sazel.android.noserverwebrtcandroid.webrtc
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import cz.sazel.android.noserverwebrtcandroid.console.IConsole
 import cz.sazel.android.noserverwebrtcandroid.settings.TurnSettings
 import org.json.JSONException
@@ -221,6 +222,7 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         }
     }
 
+    private val LOG_TAG = "ServerlessRTCClient"
     private val JSON_TYPE = "type"
     private val JSON_MESSAGE = "message"
     private val JSON_SDP = "sdp"
@@ -234,6 +236,8 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         val json = JSONObject()
         json.put(JSON_TYPE, sessDesc.type.canonicalForm())
         json.put(JSON_SDP, sessDesc.description)
+        //logged so the offer/answer can be picked up from logcat instead of retyping it from the screen
+        Log.d(LOG_TAG, json.toString())
         return json
     }
 
@@ -441,6 +445,20 @@ class ServerlessRTCClient(val console: IConsole, val context: Context, val liste
         state = State.INITIALIZING
     }
 
+
+    /**
+     * Throws the current connection away and waits for an offer again, so another offer or answer
+     * can be passed without restarting the app.
+     */
+    fun reset() {
+        destroy()
+        channel = null
+        pcInitialized = false
+        answerShown.set(false)
+        offerShown.set(false)
+        console.printf("Connection reset.")
+        waitForOffer()
+    }
 
     /**
      * Clean up some resources.

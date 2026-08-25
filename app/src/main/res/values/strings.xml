@@ -7,6 +7,7 @@
     <string name="hint_paste_answer">Please paste your answer</string>
     <string name="enter_message">Enter some message</string>
     <string name="submit">Submit</string>
+    <string name="reset">Reset connection</string>
     <string name="turn_settings">TURN server</string>
     <string name="turn_host_hint">Hostname or IP, e.g. turn.example.com:3478</string>
     <string name="turn_username_hint">Username</string>

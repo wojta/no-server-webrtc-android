@@ -59,6 +59,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), S
 
     fun makeOffer() = client.makeOffer()
 
+    fun reset() = client.reset()
+
     /**
      * Stores the TURN server entered by the user, it is used by the next offer or answer created.
      */
