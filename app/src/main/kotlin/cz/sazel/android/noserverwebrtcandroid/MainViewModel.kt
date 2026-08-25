@@ -3,6 +3,8 @@ package cz.sazel.android.noserverwebrtcandroid
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import cz.sazel.android.noserverwebrtcandroid.console.ConsoleBuffer
+import cz.sazel.android.noserverwebrtcandroid.settings.TurnSettings
+import cz.sazel.android.noserverwebrtcandroid.settings.TurnSettingsStore
 import cz.sazel.android.noserverwebrtcandroid.webrtc.ServerlessRTCClient
 import cz.sazel.android.noserverwebrtcandroid.webrtc.ServerlessRTCClient.State
 import kotlinx.coroutines.channels.Channel
@@ -31,7 +33,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application), S
 
     private val client = ServerlessRTCClient(console, application, this)
 
+    private val turnSettingsStore = TurnSettingsStore(application)
+
+    private val _turnSettings = MutableStateFlow(turnSettingsStore.load())
+
+    /** TURN server the user configured, empty when none is set up. */
+    val turnSettings = _turnSettings.asStateFlow()
+
     init {
+        applyTurnSettings(_turnSettings.value)
         try {
             client.init()
         } catch (e: Exception) {
@@ -48,6 +58,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application), S
     }
 
     fun makeOffer() = client.makeOffer()
+
+    /**
+     * Stores the TURN server entered by the user, it is used by the next offer or answer created.
+     */
+    fun saveTurnSettings(settings: TurnSettings) {
+        turnSettingsStore.save(settings)
+        _turnSettings.value = settings
+        applyTurnSettings(settings)
+    }
+
+    private fun applyTurnSettings(settings: TurnSettings) {
+        client.turnSettings = settings
+        if (settings.isConfigured) {
+            console.printf("Using TURN server %s.", settings.host)
+        } else {
+            console.printf("No TURN server set, only public STUN servers are used.")
+        }
+    }
 
     /**
      * Interprets the text entered by the user according to the state the connection is in.
