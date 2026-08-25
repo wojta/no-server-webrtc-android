@@ -1,4 +1,4 @@
-# serverless-webrtc-android
+# no-server-webrtc-android
 [![Android CI](https://github.com/wojta/no-server-webrtc-android/actions/workflows/android.yml/badge.svg)](https://github.com/wojta/no-server-webrtc-android/actions/workflows/android.yml)
 
 A demo of using WebRTC with no signaling server. But for Android written in Kotlin.
